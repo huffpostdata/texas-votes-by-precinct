@@ -1,0 +1,15 @@
+{
+  "name": "texas-votes-by-precinct",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "shapefile": "^0.6.2",
+    "topojson": "^2.2.0"
+  }
+}
