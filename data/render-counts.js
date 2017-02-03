@@ -4,16 +4,9 @@
 
 const fs = require('fs')
 
+const Filename = '2012_General_Election_Returns.csv'
 const Red = 'Romney'
 const Blue = 'Obama'
-
-const CountyNameToCode = {}
-fs.readFileSync('county-name-to-code.tsv', 'utf-8')
-  .split(/\r?\n/)
-  .forEach(s => {
-    const [ name, code ] = s.split(/\t/)
-    CountyNameToCode[name] = code
-  })
 
 function newResult() {
   const ret = {}
@@ -23,7 +16,7 @@ function newResult() {
 }
 
 const Results = {} // hash of cntyvtd => { Trump, Clinton }
-fs.readFileSync('2012_General_Election_Returns.csv', 'utf-8')
+fs.readFileSync(Filename, 'utf-8')
   .split(/\r?\n/)
   .slice(1) // nix header
   .map(s => s.split(/,/))
@@ -53,7 +46,7 @@ function color(result) {
 }
 
 const Rows = Object.keys(Results)
-  .map(k => [ k, color(Results[k]) ].join(','))
+  .map(k => [ k, Results[k][Red], Results[k][Blue], color(Results[k]) ].join(','))
 
-const Csv = `CNTYVTD,color\n${Rows.join('\n')}\n`
+const Csv = `CNTYVTD,trump,clinton,color\n${Rows.join('\n')}\n`
 fs.writeFileSync('results.csv', Csv)
