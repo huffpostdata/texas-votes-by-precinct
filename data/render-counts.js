@@ -4,12 +4,12 @@
 
 const fs = require('fs')
 
-const Filename = '2012_General_Election_Returns.csv'
-const Red = 'Romney'
-const Blue = 'Obama'
+const Filename = '2016_General_Election_Returns.csv'
+const Red = 'Trump'
+const Blue = 'Clinton'
 
 function newResult() {
-  const ret = {}
+  const ret = { total: 0 }
   ret[Red] = 0
   ret[Blue] = 0
   return ret
@@ -25,16 +25,7 @@ fs.readFileSync(Filename, 'utf-8')
     const cntyvtd = a[3]
     if (!Results.hasOwnProperty(cntyvtd)) Results[cntyvtd] = newResult()
     Results[cntyvtd][a[5]] = +a[8]
-  })
-
-fs.readFileSync('Hudspeth.csv', 'utf-8')
-  .split(/\r?\n/)
-  .slice(1) // nix header
-  .map(s => s.split(/,/))
-  .forEach(a => {
-    Results[a[0]] = {}
-    Results[a[0]][Red] = +a[1]
-    Results[a[0]][Blue] = +a[2]
+    Results[cntyvtd].total += +a[8]
   })
 
 function color(result) {
@@ -46,7 +37,7 @@ function color(result) {
 }
 
 const Rows = Object.keys(Results)
-  .map(k => [ k, Results[k][Red], Results[k][Blue], color(Results[k]) ].join(','))
+  .map(k => [ k, Results[k].total, Results[k][Red], Results[k][Blue], color(Results[k]) ].join(','))
 
-const Csv = `CNTYVTD,trump,clinton,color\n${Rows.join('\n')}\n`
-fs.writeFileSync('results.csv', Csv)
+const Csv = `CNTYVTD,total,trump,clinton,color\n${Rows.join('\n')}\n`
+fs.writeFileSync('tx-results.csv', Csv)
