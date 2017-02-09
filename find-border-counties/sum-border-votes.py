@@ -21,10 +21,12 @@ max_distance = 0
 
 with open('../data/tx-results.csv') as f:
     distances = load_distances()
+    n = 0
     total = 0
     trump = 0
     clinton = 0
 
+    n_elpaso = 0
     total_elpaso = 0
     trump_elpaso = 0
     clinton_elpaso = 0
@@ -40,14 +42,16 @@ with open('../data/tx-results.csv') as f:
             continue
 
         if distances[cntyvtd] <= max_distance:
-            total += int(cells[1])
-            trump += int(cells[2])
-            clinton += int(cells[3])
+            n += 1
+            total += int(cells[6])
+            trump += int(cells[1])
+            clinton += int(cells[2])
 
             if cntyvtd[0:3] == '141':
-                total_elpaso += int(cells[1])
-                trump_elpaso += int(cells[2])
-                clinton_elpaso += int(cells[3])
+                n_elpaso += 1
+                total_elpaso += int(cells[6])
+                trump_elpaso += int(cells[1])
+                clinton_elpaso += int(cells[2])
 
-    print("All Precincts within %d meters of border: total %d, Trump %d, Clinton %d" % (max_distance, total, trump, clinton))
-    print("Only El Paso precincts: total %d, Trump %d, Clinton %d" % (total_elpaso, trump_elpaso, clinton_elpaso))
+    print("%d Precincts within %d meters of border: total %d, Trump %d, Clinton %d" % (n, max_distance, total, trump, clinton))
+    print("Only %d El Paso precincts: total %d, Trump %d, Clinton %d" % (n, total_elpaso, trump_elpaso, clinton_elpaso))
